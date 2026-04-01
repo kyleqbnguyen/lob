@@ -1,0 +1,17 @@
+BasedOnStyle: LLVM
+
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+
+DerivePointerAlignment: false
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+AlignAfterOpenBracket: Align
+AlignTrailingComments: true
+
+SortIncludes: true
+IncludeBlocks: Regroup
+
+IndentAccessModifiers: false
+NamespaceIndentation: None
