@@ -38,7 +38,7 @@ using Trades = std::vector<Trade>;
 struct LevelInfo {
   Price price;
   Quantity quantity{0};
-  std::deque<Order> orders;
+  std::deque<OrderId> orderIds;
 };
 
 using Book = std::map<Price, LevelInfo>;
