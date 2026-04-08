@@ -17,6 +17,10 @@ public:
   std::optional<Price> bestAsk();
 
 private:
+  void matchOrder(Order& order, Trades& trades);
+
+  bool canFillFully(const Order& order);
+
   Book bids_;
   Book asks_;
 };

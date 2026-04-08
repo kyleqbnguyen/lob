@@ -13,8 +13,8 @@ enum class Side : std::uint8_t { Bid, Ask };
 
 enum class OrderType : std::uint8_t {
   GTC, // Good-Till-Cancel
-  IOC, // Immediate-Or-Kill
-  FOC, // Fill-Or-Kill
+  IOC, // Immediate-Or-Cancel
+  FOK, // Fill-Or-Kill
   DTC  // Day-Till-Cancel
 };
 
