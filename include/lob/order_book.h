@@ -1,12 +1,8 @@
 #pragma once
 
-#include "lob/level_info.h"
 #include "lob/types.h"
 
-#include <map>
 #include <optional>
-
-using Book = std::map<Price, LevelInfo>;
 
 class OrderBook {
 public:

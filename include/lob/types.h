@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstdint>
+#include <deque>
+#include <map>
 #include <vector>
 
 using OrderId = std::uint64_t;
@@ -32,3 +34,11 @@ struct Trade {
 };
 
 using Trades = std::vector<Trade>;
+
+struct LevelInfo {
+  Price price;
+  Quantity quantity{0};
+  std::deque<Order> orders;
+};
+
+using Book = std::map<Price, LevelInfo>;
