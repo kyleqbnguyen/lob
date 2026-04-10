@@ -10,7 +10,7 @@ Checks: >-
   -portability-*,
   -readability-magic-numbers,
   -cppcoreguidelines-avoid-magic-numbers,
-  -readability-identifier-naming
+  -readability-identifier-naming,
   readability-braces-around-statements
 
 WarningsAsErrors: ''

@@ -1,7 +1,8 @@
 BasedOnStyle: LLVM
 
 AllowShortFunctionsOnASingleLine: Inline
-AllowShortIfStatementsOnASingleLine: Never
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortBlocksOnASingleLine: Always
 
 DerivePointerAlignment: false
 PointerAlignment: Left
