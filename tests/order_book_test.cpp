@@ -212,3 +212,213 @@ TEST_F(OrderBookTest, OrderBookSize_CountsOrdersOn_BothSides) {
   addTestOrder(Side::Ask, OrderType::GTC, 50, 5);
   EXPECT_EQ(orderBook.getOrderBookSize(), 2);
 }
+
+// Non-Mutation Tests
+TEST_F(OrderBookTest, BestBid_DoesNotMutate_EmptyBook) {
+  EXPECT_EQ(orderBook.bestBid(), std::nullopt);
+
+  EXPECT_EQ(orderBook.bestBid(), std::nullopt);
+  EXPECT_EQ(orderBook.bestAsk(), std::nullopt);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), 0);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), 0);
+  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+}
+
+TEST_F(OrderBookTest, BestAsk_DoesNotMutate_EmptyBook) {
+  EXPECT_EQ(orderBook.bestAsk(), std::nullopt);
+
+  EXPECT_EQ(orderBook.bestBid(), std::nullopt);
+  EXPECT_EQ(orderBook.bestAsk(), std::nullopt);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), 0);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), 0);
+  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+}
+
+TEST_F(OrderBookTest, BestBid_DoesNotMutate_NonEmptyBook) {
+  addTestOrder(Side::Bid, OrderType::GTC, 100, 10);
+  addTestOrder(Side::Bid, OrderType::GTC, 50, 5);
+
+  const auto initialBestBid = orderBook.bestBid();
+  const auto initialBestAsk = orderBook.bestAsk();
+  const auto initialBidDepth = orderBook.getBookDepth(Side::Bid);
+  const auto initialAskDepth = orderBook.getBookDepth(Side::Ask);
+  const auto initialSize = orderBook.getOrderBookSize();
+  const auto initialQtyAt100 = orderBook.getQuantityAt(Side::Bid, 100);
+  const auto initialQtyAt50 = orderBook.getQuantityAt(Side::Bid, 50);
+
+  EXPECT_EQ(orderBook.bestBid(), initialBestBid);
+
+  EXPECT_EQ(orderBook.bestBid(), initialBestBid);
+  EXPECT_EQ(orderBook.bestAsk(), initialBestAsk);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), initialBidDepth);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), initialAskDepth);
+  EXPECT_EQ(orderBook.getOrderBookSize(), initialSize);
+  EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 100), initialQtyAt100);
+  EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 50), initialQtyAt50);
+}
+
+TEST_F(OrderBookTest, BestAsk_DoesNotMutate_NonEmptyBook) {
+  addTestOrder(Side::Ask, OrderType::GTC, 100, 10);
+  addTestOrder(Side::Ask, OrderType::GTC, 150, 5);
+
+  const auto initialBestBid = orderBook.bestBid();
+  const auto initialBestAsk = orderBook.bestAsk();
+  const auto initialBidDepth = orderBook.getBookDepth(Side::Bid);
+  const auto initialAskDepth = orderBook.getBookDepth(Side::Ask);
+  const auto initialSize = orderBook.getOrderBookSize();
+  const auto initialQtyAt100 = orderBook.getQuantityAt(Side::Ask, 100);
+  const auto initialQtyAt150 = orderBook.getQuantityAt(Side::Ask, 150);
+
+  EXPECT_EQ(orderBook.bestAsk(), initialBestAsk);
+
+  EXPECT_EQ(orderBook.bestBid(), initialBestBid);
+  EXPECT_EQ(orderBook.bestAsk(), initialBestAsk);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), initialBidDepth);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), initialAskDepth);
+  EXPECT_EQ(orderBook.getOrderBookSize(), initialSize);
+  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 100), initialQtyAt100);
+  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 150), initialQtyAt150);
+}
+
+TEST_F(OrderBookTest, GetBookDepth_DoesNotMutate_EmptyBook) {
+  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), 0);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), 0);
+
+  EXPECT_EQ(orderBook.bestBid(), std::nullopt);
+  EXPECT_EQ(orderBook.bestAsk(), std::nullopt);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), 0);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), 0);
+  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+}
+
+TEST_F(OrderBookTest, GetBookDepth_DoesNotMutate_NonEmptyBook) {
+  addTestOrder(Side::Bid, OrderType::GTC, 100, 10);
+  addTestOrder(Side::Bid, OrderType::GTC, 50, 5);
+  addTestOrder(Side::Ask, OrderType::GTC, 150, 7);
+
+  const auto initialBestBid = orderBook.bestBid();
+  const auto initialBestAsk = orderBook.bestAsk();
+  const auto initialBidDepth = orderBook.getBookDepth(Side::Bid);
+  const auto initialAskDepth = orderBook.getBookDepth(Side::Ask);
+  const auto initialSize = orderBook.getOrderBookSize();
+  const auto initialBidQty100 = orderBook.getQuantityAt(Side::Bid, 100);
+  const auto initialBidQty50 = orderBook.getQuantityAt(Side::Bid, 50);
+  const auto initialAskQty150 = orderBook.getQuantityAt(Side::Ask, 150);
+
+  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), initialBidDepth);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), initialAskDepth);
+
+  EXPECT_EQ(orderBook.bestBid(), initialBestBid);
+  EXPECT_EQ(orderBook.bestAsk(), initialBestAsk);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), initialBidDepth);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), initialAskDepth);
+  EXPECT_EQ(orderBook.getOrderBookSize(), initialSize);
+  EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 100), initialBidQty100);
+  EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 50), initialBidQty50);
+  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 150), initialAskQty150);
+}
+
+TEST_F(OrderBookTest, QuantityAt_DoesNotMutate_ExistingBidLevel) {
+  addTestOrder(Side::Bid, OrderType::GTC, 100, 10);
+
+  const auto initialBestBid = orderBook.bestBid();
+  const auto initialBestAsk = orderBook.bestAsk();
+  const auto initialBidDepth = orderBook.getBookDepth(Side::Bid);
+  const auto initialAskDepth = orderBook.getBookDepth(Side::Ask);
+  const auto initialSize = orderBook.getOrderBookSize();
+
+  EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 100), 10);
+
+  EXPECT_EQ(orderBook.bestBid(), initialBestBid);
+  EXPECT_EQ(orderBook.bestAsk(), initialBestAsk);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), initialBidDepth);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), initialAskDepth);
+  EXPECT_EQ(orderBook.getOrderBookSize(), initialSize);
+}
+
+TEST_F(OrderBookTest, QuantityAt_DoesNotMutate_ExistingAskLevel) {
+  addTestOrder(Side::Ask, OrderType::GTC, 100, 10);
+
+  const auto initialBestBid = orderBook.bestBid();
+  const auto initialBestAsk = orderBook.bestAsk();
+  const auto initialBidDepth = orderBook.getBookDepth(Side::Bid);
+  const auto initialAskDepth = orderBook.getBookDepth(Side::Ask);
+  const auto initialSize = orderBook.getOrderBookSize();
+
+  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 100), 10);
+
+  EXPECT_EQ(orderBook.bestBid(), initialBestBid);
+  EXPECT_EQ(orderBook.bestAsk(), initialBestAsk);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), initialBidDepth);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), initialAskDepth);
+  EXPECT_EQ(orderBook.getOrderBookSize(), initialSize);
+}
+
+TEST_F(OrderBookTest, QuantityAt_DoesNot_InsertMissingBidLevel) {
+  addTestOrder(Side::Bid, OrderType::GTC, 100, 10);
+
+  const auto initialBestBid = orderBook.bestBid();
+  const auto initialBestAsk = orderBook.bestAsk();
+  const auto initialBidDepth = orderBook.getBookDepth(Side::Bid);
+  const auto initialAskDepth = orderBook.getBookDepth(Side::Ask);
+  const auto initialSize = orderBook.getOrderBookSize();
+
+  EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 50), 0);
+
+  EXPECT_EQ(orderBook.bestBid(), initialBestBid);
+  EXPECT_EQ(orderBook.bestAsk(), initialBestAsk);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), initialBidDepth);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), initialAskDepth);
+  EXPECT_EQ(orderBook.getOrderBookSize(), initialSize);
+}
+
+TEST_F(OrderBookTest, QuantityAt_DoesNot_InsertMissingAskLevel) {
+  addTestOrder(Side::Ask, OrderType::GTC, 100, 10);
+
+  const auto initialBestBid = orderBook.bestBid();
+  const auto initialBestAsk = orderBook.bestAsk();
+  const auto initialBidDepth = orderBook.getBookDepth(Side::Bid);
+  const auto initialAskDepth = orderBook.getBookDepth(Side::Ask);
+  const auto initialSize = orderBook.getOrderBookSize();
+
+  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 50), 0);
+
+  EXPECT_EQ(orderBook.bestBid(), initialBestBid);
+  EXPECT_EQ(orderBook.bestAsk(), initialBestAsk);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), initialBidDepth);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), initialAskDepth);
+  EXPECT_EQ(orderBook.getOrderBookSize(), initialSize);
+}
+
+TEST_F(OrderBookTest, OrderBookSize_DoesNotMutateEmptyBook) {
+  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+
+  EXPECT_EQ(orderBook.bestBid(), std::nullopt);
+  EXPECT_EQ(orderBook.bestAsk(), std::nullopt);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), 0);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), 0);
+  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+}
+
+TEST_F(OrderBookTest, OrderBookSize_DoesNotMutate_NonEmptyBook) {
+  addTestOrder(Side::Bid, OrderType::GTC, 100, 10);
+  addTestOrder(Side::Ask, OrderType::GTC, 150, 5);
+
+  const auto initialBestBid = orderBook.bestBid();
+  const auto initialBestAsk = orderBook.bestAsk();
+  const auto initialBidDepth = orderBook.getBookDepth(Side::Bid);
+  const auto initialAskDepth = orderBook.getBookDepth(Side::Ask);
+  const auto initialSize = orderBook.getOrderBookSize();
+  const auto initialBidQty = orderBook.getQuantityAt(Side::Bid, 100);
+  const auto initialAskQty = orderBook.getQuantityAt(Side::Ask, 150);
+
+  EXPECT_EQ(orderBook.getOrderBookSize(), initialSize);
+
+  EXPECT_EQ(orderBook.bestBid(), initialBestBid);
+  EXPECT_EQ(orderBook.bestAsk(), initialBestAsk);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), initialBidDepth);
+  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), initialAskDepth);
+  EXPECT_EQ(orderBook.getOrderBookSize(), initialSize);
+  EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 100), initialBidQty);
+  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 150), initialAskQty);
+}

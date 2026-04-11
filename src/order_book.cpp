@@ -35,9 +35,11 @@ std::size_t OrderBook::getBookDepth(Side side) {
 
 Quantity OrderBook::getQuantityAt(Side side, Price price) {
   auto& book{(side == Side::Bid) ? bids_ : asks_};
-  auto& level{book[price]};
+  auto it = book.find(price);
 
-  return level.quantity;
+  if (it == book.end()) { return 0; }
+
+  return it->second.quantity;
 }
 
 std::size_t OrderBook::getOrderBookSize() {
