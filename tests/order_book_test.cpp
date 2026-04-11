@@ -18,11 +18,8 @@ protected:
   }
 };
 
-// addOrder returns empty std::vector if no trades match
-// addOrder returns std::vector of trades
-
-// Query Behavior
-TEST_F(OrderBookTest, EmptyBook) {
+// State Query Behavior
+TEST_F(OrderBookTest, EmptyBook_ReportsNoLiquidity) {
   EXPECT_EQ(orderBook.bestBid(), std::nullopt);
   EXPECT_EQ(orderBook.bestAsk(), std::nullopt);
 
@@ -35,7 +32,7 @@ TEST_F(OrderBookTest, EmptyBook) {
   EXPECT_EQ(orderBook.getOrderBookSize(), 0);
 }
 
-TEST_F(OrderBookTest, SingleBid) {
+TEST_F(OrderBookTest, SingleBid_OnlyReportsLiquidityOnBidSide) {
   addTestOrder(Side::Bid, OrderType::GTC, 100, 10);
 
   EXPECT_EQ(orderBook.bestBid(), 100);
@@ -50,7 +47,7 @@ TEST_F(OrderBookTest, SingleBid) {
   EXPECT_EQ(orderBook.getOrderBookSize(), 1);
 }
 
-TEST_F(OrderBookTest, SingleAsk) {
+TEST_F(OrderBookTest, SingleAsk_OnlyReportsLiquidityOnAskSide) {
   addTestOrder(Side::Ask, OrderType::GTC, 100, 10);
 
   EXPECT_EQ(orderBook.bestAsk(), 100);
@@ -65,14 +62,15 @@ TEST_F(OrderBookTest, SingleAsk) {
   EXPECT_EQ(orderBook.getOrderBookSize(), 1);
 }
 
-TEST_F(OrderBookTest, BestBidIsLargest) {
+// Method Specific Behavior
+TEST_F(OrderBookTest, BestBid_ReturnsHighestRestingBid) {
   addTestOrder(Side::Bid, OrderType::GTC, 50, 10);
   addTestOrder(Side::Bid, OrderType::GTC, 100, 10);
 
   EXPECT_EQ(orderBook.bestBid(), 100);
 }
 
-TEST_F(OrderBookTest, BestAskIsSmallest) {
+TEST_F(OrderBookTest, BestAsk_ReturnsLowestRestingAsk) {
   addTestOrder(Side::Ask, OrderType::GTC, 100, 10);
   addTestOrder(Side::Ask, OrderType::GTC, 50, 10);
 
