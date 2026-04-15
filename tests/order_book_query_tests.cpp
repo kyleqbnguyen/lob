@@ -1,22 +1,6 @@
-#include "lob/order_book.h"
-#include "lob/types.h"
+#include "order_book_test.h"
 
-#include <gtest/gtest.h>
 #include <optional>
-
-class OrderBookTest : public ::testing::Test {
-protected:
-  OrderBook orderBook{};
-  OrderId id{1};
-
-  void addTestOrder(Side side, OrderType type, Price price, Quantity quantity) {
-    orderBook.addOrder({.id = id++,
-                        .side = side,
-                        .type = type,
-                        .price = price,
-                        .quantity = quantity});
-  }
-};
 
 // State Query Behavior
 TEST_F(OrderBookTest, EmptyBook_ReportsNoLiquidity) {
