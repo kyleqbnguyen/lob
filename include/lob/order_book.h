@@ -15,15 +15,15 @@ public:
   //
   // bool modifyOrder(OrderId orderId, Quantity quantity);
 
-  std::optional<Price> bestBid();
+  std::optional<Price> bestBid() const;
 
-  std::optional<Price> bestAsk();
+  std::optional<Price> bestAsk() const;
 
-  std::size_t getBookDepth(Side side);
+  std::size_t getBookDepth(Side side) const;
 
-  Quantity getQuantityAt(Side side, Price price);
+  Quantity getQuantityAt(Side side, Price price) const;
 
-  std::size_t getOrderBookSize();
+  std::size_t getOrderBookSize() const;
 
 private:
   void matchOrder(Order& order, Trades& trades);
