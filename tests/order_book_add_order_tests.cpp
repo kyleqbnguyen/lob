@@ -13,8 +13,7 @@ TEST_F(OrderBookTest, AddOrder_ReturnsNoTrades_ForRestingInsert) {
   EXPECT_TRUE(trades.empty());
 }
 
-TEST_F(OrderBookTest,
-       AddingOppositeSideLiquidity_DoesNotAffectExistingSideState) {
+TEST_F(OrderBookTest, OppositeSideOrder_DoesNotAffectExistingSideState) {
   addTestOrder(Side::Bid, OrderType::Limit, TimeInForce::GTC, 10000, 10);
 
   EXPECT_EQ(orderBook.bestBid(), 10000);

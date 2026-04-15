@@ -45,14 +45,14 @@ TEST_F(OrderBookTest, SingleAsk_OnlyReportsLiquidityOnAskSide) {
   EXPECT_EQ(orderBook.getOrderBookSize(), 1);
 }
 
-TEST_F(OrderBookTest, BestBid_ReturnsHighestRestingBid) {
+TEST_F(OrderBookTest, BestBid_Returns_HighestRestingBid) {
   addTestOrder(Side::Bid, OrderType::Limit, TimeInForce::GTC, 5000, 10);
   addTestOrder(Side::Bid, OrderType::Limit, TimeInForce::GTC, 10000, 10);
 
   EXPECT_EQ(orderBook.bestBid(), 10000);
 }
 
-TEST_F(OrderBookTest, BestAsk_ReturnsLowestRestingAsk) {
+TEST_F(OrderBookTest, BestAsk_Returns_LowestRestingAsk) {
   addTestOrder(Side::Ask, OrderType::Limit, TimeInForce::GTC, 10000, 10);
   addTestOrder(Side::Ask, OrderType::Limit, TimeInForce::GTC, 5000, 10);
 
@@ -121,7 +121,7 @@ TEST_F(OrderBookTest, QuantityAt_ReturnsSumOfAskQuantities_AtSamePriceLevel) {
   EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 10000), sum);
 }
 
-TEST_F(OrderBookTest, QuantityAt_IgnoresOtherBidLevels) {
+TEST_F(OrderBookTest, QuantityAt_IsIsolatedPerBidLevel) {
   addTestOrder(Side::Bid, OrderType::Limit, TimeInForce::GTC, 10000, 10);
   addTestOrder(Side::Bid, OrderType::Limit, TimeInForce::GTC, 5000, 5);
 
@@ -129,7 +129,7 @@ TEST_F(OrderBookTest, QuantityAt_IgnoresOtherBidLevels) {
   EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 5000), 5);
 }
 
-TEST_F(OrderBookTest, QuantityAt_IgnoresOtherAskLevels) {
+TEST_F(OrderBookTest, QuantityAt_IsIsolatedPerAskLevel) {
   addTestOrder(Side::Ask, OrderType::Limit, TimeInForce::GTC, 10000, 10);
   addTestOrder(Side::Ask, OrderType::Limit, TimeInForce::GTC, 5000, 5);
 
@@ -149,7 +149,7 @@ TEST_F(OrderBookTest, QuantityAt_ReturnsZero_ForEmptyLevelInNonEmptyAskBook) {
   EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 5000), 0);
 }
 
-TEST_F(OrderBookTest, OrderBookSize_CountsBidsOn_SameLevel) {
+TEST_F(OrderBookTest, OrderBookSize_CountsMultipleBidsAtSameLevel) {
   EXPECT_EQ(orderBook.getOrderBookSize(), 0);
 
   addTestOrder(Side::Bid, OrderType::Limit, TimeInForce::GTC, 10000, 10);
@@ -159,7 +159,7 @@ TEST_F(OrderBookTest, OrderBookSize_CountsBidsOn_SameLevel) {
   EXPECT_EQ(orderBook.getOrderBookSize(), 2);
 }
 
-TEST_F(OrderBookTest, OrderBookSize_CountsAsksOn_SameLevel) {
+TEST_F(OrderBookTest, OrderBookSize_CountsMultipleAsksAtSameLevel) {
   EXPECT_EQ(orderBook.getOrderBookSize(), 0);
 
   addTestOrder(Side::Ask, OrderType::Limit, TimeInForce::GTC, 10000, 10);
@@ -169,7 +169,7 @@ TEST_F(OrderBookTest, OrderBookSize_CountsAsksOn_SameLevel) {
   EXPECT_EQ(orderBook.getOrderBookSize(), 2);
 }
 
-TEST_F(OrderBookTest, OrderBookSize_CountsBidsOn_NewPriceLevel) {
+TEST_F(OrderBookTest, OrderBookSize_IncrementsPerBidPriceLevel) {
   EXPECT_EQ(orderBook.getOrderBookSize(), 0);
 
   addTestOrder(Side::Bid, OrderType::Limit, TimeInForce::GTC, 10000, 10);
@@ -179,7 +179,7 @@ TEST_F(OrderBookTest, OrderBookSize_CountsBidsOn_NewPriceLevel) {
   EXPECT_EQ(orderBook.getOrderBookSize(), 2);
 }
 
-TEST_F(OrderBookTest, OrderBookSize_CountsAsksOn_NewPriceLevel) {
+TEST_F(OrderBookTest, OrderBookSize_IncrementsPerAskPriceLevel) {
   EXPECT_EQ(orderBook.getOrderBookSize(), 0);
 
   addTestOrder(Side::Ask, OrderType::Limit, TimeInForce::GTC, 10000, 10);
@@ -189,7 +189,7 @@ TEST_F(OrderBookTest, OrderBookSize_CountsAsksOn_NewPriceLevel) {
   EXPECT_EQ(orderBook.getOrderBookSize(), 2);
 }
 
-TEST_F(OrderBookTest, OrderBookSize_CountsOrdersOn_BothSides) {
+TEST_F(OrderBookTest, OrderBookSize_CountsOrdersAcrossBothSides) {
   EXPECT_EQ(orderBook.getOrderBookSize(), 0);
 
   addTestOrder(Side::Bid, OrderType::Limit, TimeInForce::GTC, 10000, 10);
@@ -198,4 +198,3 @@ TEST_F(OrderBookTest, OrderBookSize_CountsOrdersOn_BothSides) {
   addTestOrder(Side::Ask, OrderType::Limit, TimeInForce::GTC, 5000, 5);
   EXPECT_EQ(orderBook.getOrderBookSize(), 2);
 }
-
