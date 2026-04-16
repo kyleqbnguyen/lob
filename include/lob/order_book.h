@@ -28,7 +28,9 @@ public:
 private:
   void matchOrder(Order& order, Trades& trades);
 
-  // bool canFillFully(const Order& order);
+  void insertResting(const Order& order);
+
+  bool canFillFully(const Order& order);
 
   std::map<Price, LevelInfo> bids_;
   std::map<Price, LevelInfo> asks_;
