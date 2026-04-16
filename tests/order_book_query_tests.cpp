@@ -192,9 +192,9 @@ TEST_F(OrderBookTest, OrderBookSize_IncrementsPerAskPriceLevel) {
 TEST_F(OrderBookTest, OrderBookSize_CountsOrdersAcrossBothSides) {
   EXPECT_EQ(orderBook.getOrderBookSize(), 0);
 
-  addTestOrder(Side::Bid, OrderType::Limit, TimeInForce::GTC, 10000, 10);
+  addTestOrder(Side::Bid, OrderType::Limit, TimeInForce::GTC, 5000, 5);
   EXPECT_EQ(orderBook.getOrderBookSize(), 1);
 
-  addTestOrder(Side::Ask, OrderType::Limit, TimeInForce::GTC, 5000, 5);
+  addTestOrder(Side::Ask, OrderType::Limit, TimeInForce::GTC, 10000, 10);
   EXPECT_EQ(orderBook.getOrderBookSize(), 2);
 }
