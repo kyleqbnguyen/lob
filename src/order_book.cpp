@@ -61,7 +61,27 @@ bool OrderBook::cancelOrder(OrderId orderId) {
   return true;
 }
 
-// bool OrderBook::modifyOrder(OrderId orderId, Quantity quantity) {}
+bool OrderBook::modifyOrder(OrderId orderId, Quantity quantity) {
+  if (quantity == 0) { return false; }
+
+  auto orderIt{orders_.find(orderId)};
+  if (orderIt == orders_.end()) { return false; }
+
+  auto& orderInfo{orderIt->second};
+  if (orderInfo.quantity <= quantity) { return false; }
+
+  auto& book{(orderInfo.side == Side::Bid) ? bids_ : asks_};
+  auto levelIt{book.find(orderInfo.price)};
+  if (levelIt == book.end()) { return false; }
+
+  Quantity removed{orderInfo.quantity - quantity};
+
+  auto& levelInfo{levelIt->second};
+  orderInfo.quantity -= removed;
+  levelInfo.quantity -= removed;
+
+  return true;
+}
 
 std::optional<Price> OrderBook::bestBid() const {
   if (bids_.empty()) { return std::nullopt; }
