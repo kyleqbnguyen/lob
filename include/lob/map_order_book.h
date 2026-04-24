@@ -7,7 +7,7 @@
 #include <optional>
 #include <unordered_map>
 
-class OrderBook {
+class MapOrderBook {
 public:
   Trades addOrder(Order order);
 

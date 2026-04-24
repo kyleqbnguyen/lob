@@ -1,4 +1,4 @@
-#include "lob/order_book.h"
+#include "lob/map_order_book.h"
 
 #include "lob/types.h"
 
@@ -6,7 +6,7 @@
 #include <iterator>
 #include <optional>
 
-Trades OrderBook::addOrder(Order order) {
+Trades MapOrderBook::addOrder(Order order) {
   Trades trades{};
 
   switch (order.timeInForce) {
@@ -36,7 +36,7 @@ Trades OrderBook::addOrder(Order order) {
   return trades;
 }
 
-bool OrderBook::cancelOrder(OrderId orderId) {
+bool MapOrderBook::cancelOrder(OrderId orderId) {
   auto orderIt{orders_.find(orderId)};
   if (orderIt == orders_.end()) { return false; }
 
@@ -61,7 +61,7 @@ bool OrderBook::cancelOrder(OrderId orderId) {
   return true;
 }
 
-bool OrderBook::modifyOrder(OrderId orderId, Quantity quantity) {
+bool MapOrderBook::modifyOrder(OrderId orderId, Quantity quantity) {
   if (quantity == 0) { return false; }
 
   auto orderIt{orders_.find(orderId)};
@@ -83,25 +83,25 @@ bool OrderBook::modifyOrder(OrderId orderId, Quantity quantity) {
   return true;
 }
 
-std::optional<Price> OrderBook::bestBid() const {
+std::optional<Price> MapOrderBook::bestBid() const {
   if (bids_.empty()) { return std::nullopt; }
 
   return bids_.rbegin()->first;
 }
 
-std::optional<Price> OrderBook::bestAsk() const {
+std::optional<Price> MapOrderBook::bestAsk() const {
   if (asks_.empty()) { return std::nullopt; }
 
   return asks_.begin()->first;
 }
 
-std::size_t OrderBook::getBookDepth(Side side) const {
+std::size_t MapOrderBook::getBookDepth(Side side) const {
   auto& book{(side == Side::Bid) ? bids_ : asks_};
 
   return book.size();
 }
 
-Quantity OrderBook::getQuantityAt(Side side, Price price) const {
+Quantity MapOrderBook::getQuantityAt(Side side, Price price) const {
   auto& book{(side == Side::Bid) ? bids_ : asks_};
   auto it = book.find(price);
 
@@ -110,11 +110,11 @@ Quantity OrderBook::getQuantityAt(Side side, Price price) const {
   return it->second.quantity;
 }
 
-std::size_t OrderBook::getOrderBookSize() const {
+std::size_t MapOrderBook::getOrderBookSize() const {
   return orders_.size();
 }
 
-void OrderBook::matchOrder(Order& order, Trades& trades) {
+void MapOrderBook::matchOrder(Order& order, Trades& trades) {
   auto& oppBook{(order.side == Side::Bid) ? asks_ : bids_};
 
   while (order.quantity != 0 && !oppBook.empty()) {
@@ -148,7 +148,7 @@ void OrderBook::matchOrder(Order& order, Trades& trades) {
   }
 }
 
-void OrderBook::insertResting(const Order& order) {
+void MapOrderBook::insertResting(const Order& order) {
   auto& book{(order.side == Side::Bid) ? bids_ : asks_};
   auto& level{book[order.price]};
 
@@ -159,7 +159,7 @@ void OrderBook::insertResting(const Order& order) {
   orders_[order.id] = order;
 }
 
-bool OrderBook::canFillFully(const Order& order) {
+bool MapOrderBook::canFillFully(const Order& order) {
   auto& oppBook{(order.side == Side::Bid) ? asks_ : bids_};
 
   if (oppBook.empty()) { return false; }
@@ -183,7 +183,7 @@ bool OrderBook::canFillFully(const Order& order) {
   return remaining == 0;
 }
 
-bool OrderBook::canCross(const Order& order, Price bestResting) {
+bool MapOrderBook::canCross(const Order& order, Price bestResting) {
   if (order.type == OrderType::Market) { return true; }
 
   if (order.side == Side::Bid) { return order.price >= bestResting; }

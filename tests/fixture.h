@@ -1,13 +1,13 @@
 #pragma once
 
-#include "lob/order_book.h"
+#include "lob/map_order_book.h"
 #include "lob/types.h"
 
 #include <gtest/gtest.h>
 
 class OrderBookTest : public ::testing::Test {
 protected:
-  OrderBook orderBook{};
+  MapOrderBook orderBook{};
   OrderId id{1};
 
   void addTestOrder(Side side, OrderType type, TimeInForce timeInForce,
