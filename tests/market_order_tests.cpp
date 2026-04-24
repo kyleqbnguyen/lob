@@ -25,7 +25,7 @@ TEST_F(OrderBookTest,
   EXPECT_EQ(trades[0].quantity, 10);
   EXPECT_EQ(orderBook.bestBid(), std::nullopt);
   EXPECT_EQ(orderBook.bestAsk(), std::nullopt);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+  EXPECT_EQ(orderBook.orderCount(), 0);
 }
 
 TEST_F(OrderBookTest,
@@ -57,7 +57,7 @@ TEST_F(OrderBookTest,
   EXPECT_EQ(trades[1].aggressorId, 200);
   EXPECT_EQ(trades[1].price, 10100);
   EXPECT_EQ(trades[1].quantity, 4);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+  EXPECT_EQ(orderBook.orderCount(), 0);
 }
 
 TEST_F(OrderBookTest,
@@ -83,7 +83,7 @@ TEST_F(OrderBookTest,
   EXPECT_EQ(trades[0].quantity, 10);
   EXPECT_EQ(orderBook.bestBid(), std::nullopt);
   EXPECT_EQ(orderBook.bestAsk(), std::nullopt);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+  EXPECT_EQ(orderBook.orderCount(), 0);
 }
 
 TEST_F(OrderBookTest,
@@ -115,7 +115,7 @@ TEST_F(OrderBookTest,
   EXPECT_EQ(trades[1].aggressorId, 200);
   EXPECT_EQ(trades[1].price, 10000);
   EXPECT_EQ(trades[1].quantity, 4);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+  EXPECT_EQ(orderBook.orderCount(), 0);
 }
 
 TEST_F(
@@ -139,7 +139,7 @@ TEST_F(
   EXPECT_EQ(trades[0].quantity, 5);
   EXPECT_EQ(orderBook.bestBid(), std::nullopt);
   EXPECT_EQ(orderBook.bestAsk(), std::nullopt);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+  EXPECT_EQ(orderBook.orderCount(), 0);
 }
 
 TEST_F(OrderBookTest,
@@ -154,7 +154,7 @@ TEST_F(OrderBookTest,
   EXPECT_TRUE(trades.empty());
   EXPECT_EQ(orderBook.bestBid(), std::nullopt);
   EXPECT_EQ(orderBook.bestAsk(), std::nullopt);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+  EXPECT_EQ(orderBook.orderCount(), 0);
 }
 
 TEST_F(
@@ -178,7 +178,7 @@ TEST_F(
   EXPECT_EQ(trades[0].quantity, 5);
   EXPECT_EQ(orderBook.bestBid(), std::nullopt);
   EXPECT_EQ(orderBook.bestAsk(), std::nullopt);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+  EXPECT_EQ(orderBook.orderCount(), 0);
 }
 
 TEST_F(OrderBookTest,
@@ -193,7 +193,7 @@ TEST_F(OrderBookTest,
   EXPECT_TRUE(trades.empty());
   EXPECT_EQ(orderBook.bestBid(), std::nullopt);
   EXPECT_EQ(orderBook.bestAsk(), std::nullopt);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+  EXPECT_EQ(orderBook.orderCount(), 0);
 }
 
 TEST_F(OrderBookTest,
@@ -221,7 +221,7 @@ TEST_F(OrderBookTest,
   ASSERT_EQ(trades.size(), 2U);
   EXPECT_EQ(trades[0].aggressorId, 200);
   EXPECT_EQ(trades[1].aggressorId, 200);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+  EXPECT_EQ(orderBook.orderCount(), 0);
 }
 
 TEST_F(
@@ -243,8 +243,8 @@ TEST_F(
 
   EXPECT_TRUE(trades.empty());
   EXPECT_EQ(orderBook.bestAsk(), 10000);
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 10000), 5);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 1);
+  EXPECT_EQ(orderBook.quantityAt(Side::Ask, 10000), 5);
+  EXPECT_EQ(orderBook.orderCount(), 1);
 }
 
 TEST_F(OrderBookTest,
@@ -272,7 +272,7 @@ TEST_F(OrderBookTest,
   ASSERT_EQ(trades.size(), 2U);
   EXPECT_EQ(trades[0].aggressorId, 200);
   EXPECT_EQ(trades[1].aggressorId, 200);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 0);
+  EXPECT_EQ(orderBook.orderCount(), 0);
 }
 
 TEST_F(
@@ -294,6 +294,6 @@ TEST_F(
 
   EXPECT_TRUE(trades.empty());
   EXPECT_EQ(orderBook.bestBid(), 10000);
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 10000), 5);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 1);
+  EXPECT_EQ(orderBook.quantityAt(Side::Bid, 10000), 5);
+  EXPECT_EQ(orderBook.orderCount(), 1);
 }

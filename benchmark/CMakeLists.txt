@@ -8,9 +8,15 @@ FetchContent_Declare(
 set(BENCHMARK_ENABLE_TESTING OFF)
 FetchContent_MakeAvailable(googlebenchmark)
 
-file(GLOB_RECURSE BENCH_SOURCES CONFIGURE_DEPENDS "*.cpp")
+function(lob_add_perf_bench impl_name source)
+  add_executable(${PROJECT_NAME}_perf_${impl_name} ${source})
 
-add_executable(${PROJECT_NAME}_bench ${BENCH_SOURCES})
+  target_link_libraries(${PROJECT_NAME}_perf_${impl_name}
+                        PRIVATE ${PROJECT_NAME})
 
-target_link_libraries(${PROJECT_NAME}_bench PRIVATE ${PROJECT_NAME}
-                                                    benchmark::benchmark_main)
+  target_include_directories(${PROJECT_NAME}_perf_${impl_name}
+                             PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
+  target_compile_options(${PROJECT_NAME}_perf_${impl_name}
+                         PRIVATE -Wall -Wextra -Wpedantic)
+endfunction()

@@ -19,11 +19,11 @@ public:
 
   std::optional<Price> bestAsk() const;
 
-  std::size_t getBookDepth(Side side) const;
+  std::size_t depth(Side side) const;
 
-  Quantity getQuantityAt(Side side, Price price) const;
+  Quantity quantityAt(Side side, Price price) const;
 
-  std::size_t getOrderBookSize() const;
+  std::size_t orderCount() const;
 
 private:
   void matchOrder(Order& order, Trades& trades);

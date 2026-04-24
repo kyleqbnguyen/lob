@@ -19,23 +19,23 @@ TEST_F(OrderBookTest,
 
   EXPECT_EQ(orderBook.bestBid(), 10000);
   EXPECT_EQ(orderBook.bestAsk(), std::nullopt);
-  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), 1);
-  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), 0);
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 10000), 10);
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 10000), 0);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 1);
+  EXPECT_EQ(orderBook.depth(Side::Bid), 1);
+  EXPECT_EQ(orderBook.depth(Side::Ask), 0);
+  EXPECT_EQ(orderBook.quantityAt(Side::Bid, 10000), 10);
+  EXPECT_EQ(orderBook.quantityAt(Side::Ask, 10000), 0);
+  EXPECT_EQ(orderBook.orderCount(), 1);
 
   addTestOrder(Side::Ask, OrderType::Limit, TimeInForce::GTC, 15000, 7);
 
   EXPECT_EQ(orderBook.bestBid(), 10000);
   EXPECT_EQ(orderBook.bestAsk(), 15000);
-  EXPECT_EQ(orderBook.getBookDepth(Side::Bid), 1);
-  EXPECT_EQ(orderBook.getBookDepth(Side::Ask), 1);
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 10000), 10);
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 15000), 7);
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 15000), 0);
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 10000), 0);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 2);
+  EXPECT_EQ(orderBook.depth(Side::Bid), 1);
+  EXPECT_EQ(orderBook.depth(Side::Ask), 1);
+  EXPECT_EQ(orderBook.quantityAt(Side::Bid, 10000), 10);
+  EXPECT_EQ(orderBook.quantityAt(Side::Ask, 15000), 7);
+  EXPECT_EQ(orderBook.quantityAt(Side::Bid, 15000), 0);
+  EXPECT_EQ(orderBook.quantityAt(Side::Ask, 10000), 0);
+  EXPECT_EQ(orderBook.orderCount(), 2);
 }
 
 TEST_F(OrderBookTest, addOrder_shouldRestBidWithoutTrades_whenBidDoesNotCross) {
@@ -56,9 +56,9 @@ TEST_F(OrderBookTest, addOrder_shouldRestBidWithoutTrades_whenBidDoesNotCross) {
   EXPECT_TRUE(trades.empty());
   EXPECT_EQ(orderBook.bestBid(), 10000);
   EXPECT_EQ(orderBook.bestAsk(), 10100);
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 10000), 5);
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 10100), 10);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 2);
+  EXPECT_EQ(orderBook.quantityAt(Side::Bid, 10000), 5);
+  EXPECT_EQ(orderBook.quantityAt(Side::Ask, 10100), 10);
+  EXPECT_EQ(orderBook.orderCount(), 2);
 }
 
 TEST_F(OrderBookTest, addOrder_shouldRestAskWithoutTrades_whenAskDoesNotCross) {
@@ -79,7 +79,7 @@ TEST_F(OrderBookTest, addOrder_shouldRestAskWithoutTrades_whenAskDoesNotCross) {
   EXPECT_TRUE(trades.empty());
   EXPECT_EQ(orderBook.bestBid(), 10000);
   EXPECT_EQ(orderBook.bestAsk(), 10100);
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 10000), 10);
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 10100), 5);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 2);
+  EXPECT_EQ(orderBook.quantityAt(Side::Bid, 10000), 10);
+  EXPECT_EQ(orderBook.quantityAt(Side::Ask, 10100), 5);
+  EXPECT_EQ(orderBook.orderCount(), 2);
 }

@@ -28,8 +28,8 @@ TEST_F(OrderBookTest,
 
   orderBook.modifyOrder(100, 4);
 
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Bid, 10000), 4);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 1);
+  EXPECT_EQ(orderBook.quantityAt(Side::Bid, 10000), 4);
+  EXPECT_EQ(orderBook.orderCount(), 1);
 }
 
 TEST_F(OrderBookTest,
@@ -43,8 +43,8 @@ TEST_F(OrderBookTest,
 
   orderBook.modifyOrder(100, 4);
 
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 10000), 4);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 1);
+  EXPECT_EQ(orderBook.quantityAt(Side::Ask, 10000), 4);
+  EXPECT_EQ(orderBook.orderCount(), 1);
 }
 
 TEST_F(OrderBookTest,
@@ -64,8 +64,8 @@ TEST_F(OrderBookTest,
 
   orderBook.modifyOrder(100, 3);
 
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 10000), 9);
-  EXPECT_EQ(orderBook.getOrderBookSize(), 2);
+  EXPECT_EQ(orderBook.quantityAt(Side::Ask, 10000), 9);
+  EXPECT_EQ(orderBook.orderCount(), 2);
 }
 
 TEST_F(OrderBookTest,
@@ -131,5 +131,5 @@ TEST_F(OrderBookTest,
   orderBook.modifyOrder(100, 3);
 
   EXPECT_EQ(orderBook.bestAsk(), 10100);
-  EXPECT_EQ(orderBook.getQuantityAt(Side::Ask, 10100), 5);
+  EXPECT_EQ(orderBook.quantityAt(Side::Ask, 10100), 5);
 }

@@ -25,6 +25,7 @@ Trades MapOrderBook::addOrder(Order order) {
     if (canFillFully(order)) { matchOrder(order, trades); }
     break;
 
+  // TODO
   case TimeInForce::DTC:
     matchOrder(order, trades);
     if (order.quantity > 0 && order.type == OrderType::Limit) {
@@ -95,13 +96,13 @@ std::optional<Price> MapOrderBook::bestAsk() const {
   return asks_.begin()->first;
 }
 
-std::size_t MapOrderBook::getBookDepth(Side side) const {
+std::size_t MapOrderBook::depth(Side side) const {
   auto& book{(side == Side::Bid) ? bids_ : asks_};
 
   return book.size();
 }
 
-Quantity MapOrderBook::getQuantityAt(Side side, Price price) const {
+Quantity MapOrderBook::quantityAt(Side side, Price price) const {
   auto& book{(side == Side::Bid) ? bids_ : asks_};
   auto it = book.find(price);
 
@@ -110,7 +111,7 @@ Quantity MapOrderBook::getQuantityAt(Side side, Price price) const {
   return it->second.quantity;
 }
 
-std::size_t MapOrderBook::getOrderBookSize() const {
+std::size_t MapOrderBook::orderCount() const {
   return orders_.size();
 }
 
