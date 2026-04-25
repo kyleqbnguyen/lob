@@ -26,14 +26,6 @@ Trades MapOrderBook::addOrder(Order order) {
       matchOrder(order, trades);
     }
     break;
-
-  // TODO
-  case TimeInForce::DTC:
-    matchOrder(order, trades);
-    if (order.quantity > 0 && order.type == OrderType::Limit) {
-      insertResting(order);
-    }
-    break;
   }
 
   return trades;

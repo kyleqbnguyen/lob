@@ -16,7 +16,6 @@ enum class TimeInForce : std::uint8_t {
   GTC, // Good-Till-Cancel
   IOC, // Immediate-Or-Cancel
   FOK, // Fill-Or-Kill
-  DTC  // Day-Till-Cancel
 };
 
 struct Order {

@@ -24,7 +24,7 @@ constexpr int modifyWeight{5};
 
 // TODO:
 //   - crossing
-//   - TIF: IOC, FOK, DTC
+//   - TIF: IOC, FOK
 void generateSyntheticWorkload(std::vector<OrderEvent>& out, std::size_t n,
                                std::uint64_t seed) {
   out.clear();
