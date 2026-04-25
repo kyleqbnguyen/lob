@@ -20,3 +20,5 @@ function(lob_add_perf_bench impl_name source)
   target_compile_options(${PROJECT_NAME}_perf_${impl_name}
                          PRIVATE -Wall -Wextra -Wpedantic)
 endfunction()
+
+lob_add_perf_bench(map bench_map.cpp)
